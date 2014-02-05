@@ -1,0 +1,19 @@
+{
+  "name" : "sweelix/image",
+  "description" : "Simple image handler",
+  "license" : "BSD-3-Clause",
+  "version" : "1.0.0",
+  "require" : {
+    "php" : ">=5.3.0"
+  },
+  "authors" : [ {
+    "name" : "Philippe Gaultier",
+    "email" : "pgaultier@gmail.com"
+  } ],
+  "keywords" : [ "resize", "image" ],
+  "autoload" : {
+    "psr-4" : {
+      "sweelix\\image\\" : ""
+    }
+  }
+}
