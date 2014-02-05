@@ -101,7 +101,7 @@ class Image {
 	/**
 	 * @var string cache path
 	 */
-	public $cachePath='cache';
+	public static $cachePath='cache';
 	/**
 	 * Caching mode can be :
 	 *  - debug : resample image each time,
@@ -280,7 +280,7 @@ class Image {
 		if($fullPath === false) {
 			return $this->_targetName;
 		} else {
-			return $this->cachePath.DIRECTORY_SEPARATOR.$this->_targetName;
+			return static::$cachePath.DIRECTORY_SEPARATOR.$this->_targetName;
 		}
 	}
 
@@ -292,10 +292,10 @@ class Image {
 	 */
 	private function getIsCached() {
 		switch($this->cachingMode) {
-			case self::MODE_DEBUG :
+			case static::MODE_DEBUG :
 				$this->_isCached = false;
 				break;
-			case self::MODE_NORMAL :
+			case static::MODE_NORMAL :
 				if(($this->_isCached === null) && (file_exists($this->getCachedName(true)) === true)) {
 					$cacheTime = filemtime($this->getCachedName(true));
 					$originalTime = filemtime($this->_fileImage);
@@ -308,7 +308,7 @@ class Image {
 					$this->_isCached = false;
 				}
 				break;
-			case self::MODE_PERFORMANCE :
+			case static::MODE_PERFORMANCE :
 			default :
 				if($this->_isCached === null) {
 					$this->_isCached = file_exists($this->getCachedName(true));
@@ -462,7 +462,7 @@ class Image {
 			//be sure to resample once everything is done and not before
 			$this->resample();
 		}
-		return str_replace(DIRECTORY_SEPARATOR, self::$urlSeparator, $this->getCachedName($fullpath));
+		return str_replace(DIRECTORY_SEPARATOR, static::$urlSeparator, $this->getCachedName($fullpath));
 	}
 
 	/**
