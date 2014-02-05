@@ -13,6 +13,8 @@
  * @package   sweelix.image
  */
 
+namespace sweelix\image;
+
 /**
  * Class Image
  *
