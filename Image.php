@@ -233,7 +233,7 @@ class Image {
 	public function __toString() {
 		try{
 			return $this->getUrl();
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			return static::$errorImage;
 		}
 	}
@@ -496,7 +496,7 @@ class Image {
 			}
 			fclose($f);
 		} else {
-			throw new Exception('File '.$this->getCachedName(true).' cannot be opened');
+			throw new \Exception('File '.$this->getCachedName(true).' cannot be opened');
 		}
 		return $data;
 	}
@@ -523,7 +523,7 @@ class Image {
 				$contentType = 'image/jpeg';
 				break;
 			default:
-				throw new Exception('imagetype unknown');
+				throw new \Exception('imagetype unknown');
 				break;
 		}
 		return $contentType;
@@ -582,7 +582,7 @@ class Image {
 				$gdImage = imagecreatefromjpeg($filename);
 				break;
 			default:
-				throw new Exception('imagetype unknown');
+				throw new \Exception('imagetype unknown');
 				break;
 		}
 		return $gdImage;
@@ -671,7 +671,7 @@ class Image {
 				}
 				break;
 			default:
-				throw new Exception('imagetype unknown');
+				throw new \Exception('imagetype unknown');
 				break;
 		}
 		return $rawData;
