@@ -105,6 +105,10 @@ class Image {
 	 */
 	public static $cachePath='cache';
 	/**
+	 * @var string cache url
+	 */
+	public static $cacheUrl='cache';
+	/**
 	 * Caching mode can be :
 	 *  - debug : resample image each time,
 	 *  - normal : resample image if original filetime > cache filetime
@@ -464,7 +468,9 @@ class Image {
 			//be sure to resample once everything is done and not before
 			$this->resample();
 		}
-		return str_replace(DIRECTORY_SEPARATOR, static::$urlSeparator, $this->getCachedName($fullpath));
+		$cachedName = $this->getCachedName($fullpath);
+		$cachedName = str_replace(self::$cachePath, self::$cacheUrl, $cachedName);
+		return str_replace(DIRECTORY_SEPARATOR, static::$urlSeparator, $cachedName);
 	}
 
 	/**
