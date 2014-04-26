@@ -474,6 +474,23 @@ class Image {
 	}
 
 	/**
+	 * get path to access the image.
+	 *
+	 * @return string
+	 * @since  XXX
+	 */
+	public function getPath() {
+	    if($this->_resized === false) {
+	        $this->resize($this->_targetWidth, $this->_targetHeight);
+	    }
+	    if($this->getIsCached() === false) {
+	        //be sure to resample once everything is done and not before
+	        $this->resample();
+	    }
+	    return $this->getCachedName(true);
+	}
+
+	/**
 	 * Render the image and output it.
 	 * if $return is true, the method return the binary data else
 	 * the method return the size of the data.
