@@ -456,17 +456,18 @@ class Image {
 	 * get relative url to access the image.
 	 *
 	 * @param boolean $fullpath if true return fullpath else only the filename
+	 * @param integer $imageType image type ex:IMAGETYPE_PNG
 	 *
 	 * @return string
 	 * @since  1.0.0
 	 */
-	public function getUrl($fullpath=true) {
+	public function getUrl($fullpath = true, $imageType = null) {
 		if($this->_resized === false) {
 			$this->resize($this->_targetWidth, $this->_targetHeight);
 		}
 		if($this->getIsCached() === false) {
 			//be sure to resample once everything is done and not before
-			$this->resample();
+			$this->resample(false, $imageType);
 		}
 		$cachedName = $this->getCachedName($fullpath);
 		$cachedName = str_replace(self::$cachePath, self::$cacheUrl, $cachedName);
@@ -476,16 +477,18 @@ class Image {
 	/**
 	 * get path to access the image.
 	 *
+	 * @param integer $imageType image type ex:IMAGETYPE_PNG
+	 *
 	 * @return string
 	 * @since  XXX
 	 */
-	public function getPath() {
+	public function getPath($imageType = null) {
 	    if($this->_resized === false) {
 	        $this->resize($this->_targetWidth, $this->_targetHeight);
 	    }
 	    if($this->getIsCached() === false) {
 	        //be sure to resample once everything is done and not before
-	        $this->resample();
+	        $this->resample(false, $imageType);
 	    }
 	    return $this->getCachedName(true);
 	}
@@ -496,20 +499,21 @@ class Image {
 	 * the method return the size of the data.
 	 *
 	 * @param boolean $return if true return the data else the size of the data and data to stdout
+	 * @param integer $imageType image type ex:IMAGETYPE_PNG
 	 *
 	 * @return mixed
 	 *
-	 * @throws Exception
+	 * @throws \Exception
 	 * @since  1.0.0
 	 */
-	public function render($return=false) {
+	public function render($return=false, $imageType = null) {
 		$data = false;
 		if($this->_resized === false) {
 			$this->resize($this->_targetWidth, $this->_targetHeight);
 		}
 		if($this->getIsCached() === false) {
 			//be sure to resample once everything is done and not before
-			$this->resample();
+			$this->resample($return, $imageType);
 		}
 		if(($f = fopen($this->getCachedName(true), 'rb')) !== false) {
 			if($return === false) {
@@ -527,6 +531,7 @@ class Image {
 	/**
 	 * Retrieve content type of current image.
 	 *
+	 * @throws \Exception
 	 * @return string
 	 * @since  1.0.0
 	 */
@@ -556,14 +561,16 @@ class Image {
 	 * Render the image directly withou using local files.
 	 * Usefull for previewing images
 	 *
+	 * @param integer $imageType image type ex:IMAGETYPE_PNG
+	 *
 	 * @return string
 	 * @since  1.0.0
 	 */
-	public function liveRender() {
+	public function liveRender($imageType = null) {
 		if($this->_resized === false) {
 			$this->resize($this->_targetWidth, $this->_targetHeight);
 		}
-		return $this->resample(true);
+		return $this->resample(true, $imageType);
 	}
 
 	/**
@@ -587,6 +594,7 @@ class Image {
 	 * @param string  $filename filename to the image (with path)
 	 * @param integer $type     type of the image @see getimagesize()
 	 *
+	 * @throws \Exception
 	 * @return GdImage
 	 * @since  1.0.0
 	 */
@@ -616,12 +624,15 @@ class Image {
 	 * true, the bytes are returned instead of saving them to a specific
 	 * file
 	 *
-	 * @param $return boolean true to return the data instead of writing it
+	 * @param $return    boolean true to return the data instead of writing it
+	 * @param $imageType integer Image type ex: IMAGETYPE_PNG
 	 *
+	 * @throws \Exception
 	 * @return mixed
 	 * @since  1.0.0
 	 */
-	private function resample($return = false) {
+	private function resample($return = false, $imageType = null) {
+		$imageType = ($imageType !== null) ? $imageType : $this->_imageType;
 		$this->computeSize();
 		$originalImage = $this->loadImage($this->_fileImage, $this->_imageType);
 		if($this->_fit === false) {
@@ -664,7 +675,7 @@ class Image {
 		}
 		$cachedName = ($return === true)?null:$this->getCachedName(true);
 		$rawData = null;
-		switch($this->_imageType) {
+		switch($imageType) {
 			case IMAGETYPE_PNG:
 				$imageQuality = (int) ($this->_quality/10);
 				if($return === true) {
