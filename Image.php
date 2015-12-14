@@ -513,7 +513,7 @@ class Image {
 		}
 		if($this->getIsCached() === false) {
 			//be sure to resample once everything is done and not before
-			$this->resample($return, $imageType);
+			$this->resample(false, $imageType);
 		}
 		if(($f = fopen($this->getCachedName(true), 'rb')) !== false) {
 			if($return === false) {
